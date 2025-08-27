@@ -6,6 +6,7 @@ use App\Http\Resources\V1\CustomerResource;
 use App\Models\Customer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Filters\V1\CustomerFilter;
 
 class CustomerController extends Controller
 {
@@ -13,10 +14,20 @@ class CustomerController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $perPage = request()->get('perPage',5);
-        return CustomerResource::collection(Customer::paginate($perPage));
+        $filter = new CustomerFilter();
+        $queryItems = $filter->transform($request);
+
+        $query = Customer::query();
+
+        if (count($queryItems) > 0) {
+            foreach ($queryItems as $item) {
+                $query->where($item[0], $item[1], $item[2]);
+            }
+        }
+
+        return CustomerResource::collection($query->paginate()->appends($request->query())); // you can also use paginate()->withQueryString its much more readable
     }
 
     /**

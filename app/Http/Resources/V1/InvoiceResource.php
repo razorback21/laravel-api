@@ -21,7 +21,7 @@ class InvoiceResource extends JsonResource
             'status' => $this->status,
             'billedDate' => $this->billed_at,
             'paidDate' => $this->paid_at,
-            'customer' => new CustomerResource($this->customer),
+            //'customer' => new CustomerResource($this->customer),
         ];
     }
 }

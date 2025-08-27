@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Http\Filters\V1\CustomerFilter;
+use App\Http\Filters\V1\InvoiceFilter;
+use App\Models\Customer;
 use App\Models\Invoice;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -12,10 +15,20 @@ class InvoiceController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $perPage = request()->get('perPage',5);
-        return InvoiceResource::collection(Invoice::paginate($perPage));
+        $filter = new InvoiceFilter();
+        $queryItems = $filter->transform($request);
+
+        $query = Invoice::query();
+
+        if (count($queryItems) > 0) {
+            foreach ($queryItems as $item) {
+                $query->where($item[0], $item[1], $item[2]);
+            }
+        }
+
+        return InvoiceResource::collection($query->paginate()->withQueryString());
     }
 
     /**
