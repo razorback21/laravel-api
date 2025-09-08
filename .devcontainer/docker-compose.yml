@@ -1,0 +1,37 @@
+services:
+    laraapi:
+        privileged: true
+        build:
+            context: .
+            dockerfile: Dockerfile
+        # limit memory
+        deploy:
+            resources:
+                limits:
+                    memory: 256M
+        # use by curl
+        hostname: laraapi.loc
+        container_name: laraapi_app
+        networks:
+            - padz_network
+        volumes:
+            - ../..:/workspaces:cached
+        # Overrides default command so things don't shut down after the process ends.
+        command: sleep infinity
+        ports:
+            - "8005:8005"
+            - "5177:5177"
+        expose:
+            - 8005
+            - 5176
+        labels:
+            - "traefik.enable=true"
+            - "traefik.http.routers.laraapi.rule=Host(`laraapi.loc`)"
+            - "traefik.http.routers.laraapi.entrypoints=web"
+            - "traefik.http.routers.laraapi.service=laraapi"
+            - "traefik.http.services.laraapi.loadbalancer.server.port=8005"
+
+networks:
+    padz_network:
+        external: true
+        name: donz_network
