@@ -6,7 +6,7 @@
     //"image": "mcr.microsoft.com/devcontainers/php:1-8.4-bullseye",
     "dockerComposeFile": "docker-compose.yml",
     "service": "laraapi",
-    "workspaceFolder": "/workspaces/eloquent"
+    "workspaceFolder": "/workspaces/laraapi"
     // Features to add to the dev container. More info: https://containers.dev/features.
     //"features": {},
 

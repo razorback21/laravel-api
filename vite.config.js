@@ -4,10 +4,10 @@ import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
     server: {
-        host: true,
+        host: "laraapi.loc",
         port: 5177,
         strictPort: true,
-        origin: "http://localhost:5177",
+        origin: "http://laraapi.loc:5177",
         cors: true,
         hmr: {
             port: 5177,
